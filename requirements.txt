@@ -1,0 +1,17 @@
+# Character content pipeline dependencies
+# Portable, local, free. Runs anywhere Python 3.9+ is installed.
+
+# --- core pipeline ---
+requests>=2.31.0        # talk to ComfyUI HTTP API + optional Ollama
+websocket-client>=1.7.0 # listen for ComfyUI generation progress
+PyYAML>=6.0             # read config files
+Pillow>=10.0.0          # image handling / validation
+
+# --- mobile/cloud web app (phone access + Colab hosting) ---
+fastapi>=0.110.0        # web backend / API
+uvicorn>=0.29.0         # ASGI server that runs the web app
+python-multipart>=0.0.9 # handle reference-image file uploads
+
+# Optional (NOT required): a local LLM via Ollama for extra-creative scene ideas.
+# Install separately from https://ollama.com if you want it; the offline idea
+# engine works with no extra install.

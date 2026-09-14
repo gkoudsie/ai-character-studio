@@ -1,0 +1,47 @@
+# =============================================================================
+# CHARACTER DEFINITION
+# Define your AI character once. These settings describe WHO the character is
+# and are reused across every image and video so the character stays consistent.
+# =============================================================================
+
+# The core visual description of your character. Be specific and detailed:
+# appearance, age, hair, eyes, clothing style, distinguishing features.
+# The more precise and consistent this text is, the more consistent your results.
+character_prompt: >-
+  a young woman with long wavy auburn hair, green eyes, freckles across her nose,
+  wearing a casual cream sweater, natural soft lighting, photorealistic, highly detailed
+
+# Things you never want to appear. Helps clean up generations.
+negative_prompt: >-
+  blurry, deformed, distorted face, extra fingers, extra limbs, watermark, text,
+  logo, low quality, cartoon, anime, bad anatomy, disfigured
+
+# Reference images of your character (the pics you already have).
+# Put your image files in the reference_images/ folder and list their paths here.
+# These are used for character consistency via IPAdapter.
+# Leave the list empty ([]) to generate from the prompt alone.
+reference_images:
+  - reference_images/char_01.jpg
+  # - reference_images/char_02.jpg
+  # - reference_images/char_03.jpg
+
+# How strongly to follow the reference images (0.0 = ignore, 1.0 = very strong).
+# 0.6-0.8 is a good starting range for keeping the character recognizable
+# while still allowing new poses and scenes.
+reference_strength: 0.7
+
+# -----------------------------------------------------------------------------
+# MODEL FILES
+# These are the model filenames as they appear inside ComfyUI's models folders.
+# You download these once during setup (see README). Change only if you use
+# different models.
+# -----------------------------------------------------------------------------
+models:
+  checkpoint: sd_xl_base_1.0.safetensors   # base image model (ComfyUI/models/checkpoints)
+  ipadapter: ip-adapter-plus_sdxl_vit-h.safetensors  # character reference (ComfyUI/models/ipadapter)
+  clip_vision: CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors  # for IPAdapter (ComfyUI/models/clip_vision)
+
+  # OPTIONAL: a trained LoRA for maximum character consistency.
+  # Leave as null if you don't have one yet. See README for how to train one.
+  lora: null            # e.g. my_character_lora.safetensors (ComfyUI/models/loras)
+  lora_strength: 0.8

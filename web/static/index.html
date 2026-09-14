@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f0f14" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>AI Character Studio</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>AI Character Studio</h1>
+    <p class="tagline">Pick a theme, tap Create. Your PC does the rest.</p>
+  </header>
+
+  <main class="container">
+    <!-- CONTROLS -->
+    <section class="card" id="controls">
+      <label class="field">
+        <span>Character reference photo (optional)</span>
+        <input id="reference" type="file" accept="image/png,image/jpeg,image/webp" />
+        <span id="refStatus" class="muted"></span>
+      </label>
+
+      <label class="field">
+        <span>Theme</span>
+        <input id="theme" type="text" list="theme-presets"
+               placeholder="e.g. travel in Japan" value="coffee shop lifestyle" />
+        <datalist id="theme-presets"></datalist>
+      </label>
+
+      <label class="field">
+        <span>How many scenes: <b id="countLabel">4</b></span>
+        <input id="count" type="range" min="1" max="10" value="4" />
+      </label>
+
+      <div class="toggles">
+        <label class="toggle">
+          <input id="makeVideo" type="checkbox" checked />
+          <span>Animate videos</span>
+        </label>
+        <label class="toggle">
+          <input id="makeReel" type="checkbox" checked />
+          <span>Assemble reel</span>
+        </label>
+        <label class="toggle">
+          <input id="captions" type="checkbox" checked />
+          <span>Captions</span>
+        </label>
+        <label class="toggle">
+          <input id="useLlm" type="checkbox" />
+          <span>Use local LLM</span>
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button id="previewBtn" class="btn ghost">Preview ideas</button>
+        <button id="createBtn" class="btn primary">Create</button>
+      </div>
+    </section>
+
+    <!-- IDEAS PREVIEW -->
+    <section class="card hidden" id="ideasCard">
+      <h2>Scene ideas</h2>
+      <ol id="ideasList" class="ideas"></ol>
+    </section>
+
+    <!-- PROGRESS -->
+    <section class="card hidden" id="progressCard">
+      <h2 id="stageText">Working…</h2>
+      <div class="bar"><div id="barFill" class="bar-fill"></div></div>
+      <p id="progressMsg" class="muted"></p>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="card hidden" id="resultsCard">
+      <h2>Results</h2>
+
+      <div class="btn-row">
+        <a id="downloadAll" class="btn primary" download>Download all (zip)</a>
+        <button id="clearBtn" class="btn ghost">Delete from server</button>
+      </div>
+      <p id="expiryNote" class="muted"></p>
+
+      <div id="reelWrap" class="hidden">
+        <h3>Reel</h3>
+        <video id="reelVideo" class="reel" controls playsinline></video>
+        <a id="reelDownload" class="btn primary block" download>Download reel</a>
+      </div>
+
+      <div id="clipsWrap" class="hidden">
+        <h3>Clips</h3>
+        <div id="clipsGrid" class="grid"></div>
+      </div>
+
+      <div id="imagesWrap" class="hidden">
+        <h3>Images</h3>
+        <div id="imagesGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- ERROR -->
+    <section class="card error hidden" id="errorCard">
+      <h2>Something went wrong</h2>
+      <p id="errorText" class="muted"></p>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p class="muted">Local &amp; free. Content is AI-generated — use responsibly.</p>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

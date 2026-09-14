@@ -1,0 +1,15 @@
+# Generated content
+output/
+
+# Your source pictures (don't commit personal images by default)
+reference_images/*
+!reference_images/.gitkeep
+
+# Optional media assets
+assets/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

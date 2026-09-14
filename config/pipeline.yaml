@@ -1,0 +1,128 @@
+# =============================================================================
+# PIPELINE SETTINGS
+# These are the knobs you tweak per run: how many images, scene prompts,
+# clip length, output format, captions, music, etc.
+# Anything here can also be overridden on the command line with a flag
+# (e.g. --num-images 10 --clip-length 4). CLI flags win over this file.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# CONNECTION: where ComfyUI is running (the free local generation backend)
+# -----------------------------------------------------------------------------
+comfyui:
+  host: 127.0.0.1
+  port: 8188
+
+# -----------------------------------------------------------------------------
+# CREATIVE MODE: let the pipeline INVENT the scenes for you.
+# Give it a theme and it auto-generates varied scene ideas AND captions, using
+# your reference picture only for the character's LOOK. This is the hands-off,
+# "be creative" mode.
+#
+#   - Set creative.enabled: true and pick a theme.
+#   - When enabled, scene_prompts below are IGNORED and generated automatically.
+#   - Set creative.enabled: false to use the hand-written scene_prompts instead.
+#
+# Backends:
+#   - Offline idea engine (default): free, instant, works with no extra setup.
+#     Known themes: lifestyle, travel, fitness, fashion, food (any text works too).
+#   - Optional local LLM via Ollama for more variety: set use_llm: true and have
+#     Ollama running (http://localhost:11434). Falls back to offline if absent.
+# All generated content is safe-for-work.
+# -----------------------------------------------------------------------------
+creative:
+  enabled: true
+  theme: "coffee shop lifestyle"
+  use_llm: false           # true = try local Ollama LLM, else offline engine
+  llm_model: "llama3"      # only used when use_llm is true
+  auto_captions: true      # use the engine's captions for the reel
+
+# -----------------------------------------------------------------------------
+# SCENES (manual mode): used only when creative.enabled is false.
+# The character_prompt from character.yaml is automatically combined with each
+# scene, so you only describe the SCENE here, not the character.
+#
+# num_images controls how many scenes to actually use this run:
+#   - If num_images <= len(scene_prompts): uses the first N prompts.
+#   - If num_images  > len(scene_prompts): reuses prompts (cycles) to reach N.
+# -----------------------------------------------------------------------------
+num_images: 5
+
+scene_prompts:
+  - "standing in a sunny park, smiling, trees in background"
+  - "sitting in a cozy coffee shop, holding a warm cup, window light"
+  - "walking down a city street at golden hour, urban background"
+  - "at the beach during sunset, gentle breeze, ocean behind"
+  - "in a modern kitchen cooking, warm indoor lighting"
+
+# -----------------------------------------------------------------------------
+# IMAGE GENERATION
+# -----------------------------------------------------------------------------
+image:
+  width: 832          # portrait-friendly base (SDXL likes ~1 megapixel)
+  height: 1216
+  steps: 30           # more steps = higher quality, slower
+  cfg: 7.0            # how strongly to follow the prompt
+  sampler: euler
+  scheduler: normal
+
+# -----------------------------------------------------------------------------
+# SEED: controls reproducibility.
+#   - Set a fixed number (e.g. 12345) to get the same results every run.
+#   - Set to -1 to randomize each run.
+# The same base seed is used to keep the character consistent; each scene
+# gets seed + scene_index so scenes differ but stay reproducible.
+# -----------------------------------------------------------------------------
+seed: 12345
+
+# -----------------------------------------------------------------------------
+# VIDEO: animate each generated image into a short clip.
+# Set enabled: false to only produce images (skip video + reel).
+# -----------------------------------------------------------------------------
+video:
+  enabled: true
+  clip_length_seconds: 4
+  fps: 24
+  motion: 1.0         # amount of movement in the animation (model-dependent)
+  # image-to-video model filename (ComfyUI/models/checkpoints), see README
+  model: svd_xt.safetensors
+
+# -----------------------------------------------------------------------------
+# REEL ASSEMBLY: stitch the clips into one 9:16 vertical video.
+# Requires FFmpeg installed and on PATH (see README).
+# Set enabled: false to keep individual clips without stitching.
+# -----------------------------------------------------------------------------
+reel:
+  enabled: true
+  width: 1080
+  height: 1920
+  fps: 30
+  # optional crossfade between clips, in seconds (0 = hard cuts)
+  transition_seconds: 0.5
+
+  # CAPTIONS: burn text onto each clip. One entry per scene (cycles if fewer).
+  # Set enabled: false for no captions.
+  captions:
+    enabled: true
+    texts:
+      - "Sunny days"
+      - "Coffee time"
+      - "City walks"
+      - "Beach sunset"
+      - "Home cooking"
+    font_size: 64
+    font_color: white
+    # position: top | center | bottom
+    position: bottom
+
+  # MUSIC: optional background audio file (mp3/wav). null = no music.
+  music_file: null      # e.g. assets/music.mp3
+
+# -----------------------------------------------------------------------------
+# OUTPUT: where results are written.
+# -----------------------------------------------------------------------------
+output:
+  images_dir: output/images
+  clips_dir: output/clips
+  reels_dir: output/reels
+  reel_filename: reel.mp4

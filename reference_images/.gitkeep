@@ -1,0 +1,2 @@
+# Put your character's reference pictures in this folder,
+# then list them in config/character.yaml under `reference_images:`.
